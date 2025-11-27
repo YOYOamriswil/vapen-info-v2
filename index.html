@@ -3,474 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vapen Info - Jugendtreff</title>
+    <title>Vapen-Checker 🧠 | Interaktives Tool für Jugendtreff</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
             min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 15px;
+            overflow-x: hidden;
         }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 900px;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
+        h1 {
             text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
-
-        .tabs {
-            display: flex;
-            border-bottom: 3px solid #f0f0f0;
-            background: #fafafa;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 20px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 1.05em;
-            font-weight: 600;
-            color: #666;
-            transition: all 0.3s ease;
-            border-bottom: 4px solid transparent;
-            min-width: 150px;
-        }
-
-        .tab-btn:hover {
-            background: #f5f5f5;
-            color: #667eea;
-        }
-
-        .tab-btn.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-            background: white;
-        }
-
-        .tab-content {
-            display: none;
-            padding: 40px 30px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-title {
-            color: #667eea;
+            color: white;
             font-size: 1.8em;
             margin-bottom: 20px;
-            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-
-        .fact-box {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border-left: 5px solid #667eea;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .info-card {
-            background: #f9f9f9;
-            border-radius: 12px;
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             padding: 25px;
-            margin: 20px 0;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
+            margin-bottom: 20px;
         }
-
-        .info-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
-            border-color: #667eea;
+        .question {
+            display: none;
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
         }
-
-        .info-card h3 {
-            color: #667eea;
-            font-size: 1.4em;
-            margin-bottom: 12px;
-        }
-
-        .info-card p {
-            color: #555;
-            line-height: 1.7;
-            font-size: 1.05em;
-        }
-
-        .list-item {
-            margin: 15px 0;
-            padding-left: 30px;
-            position: relative;
-            color: #555;
-            line-height: 1.7;
-        }
-
-        .list-item:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #667eea;
-            font-weight: bold;
-            font-size: 1.3em;
-        }
-
-        .warning-box {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            color: #856404;
-        }
-
-        .warning-box h3 {
-            color: #ff6b6b;
-            margin-bottom: 10px;
-            font-size: 1.3em;
-        }
-
-        .stats-grid {
+        .question.active { display: block; animation: slideIn 0.5s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .answers {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
         }
-
-        .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .answer-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
             color: white;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
-        }
-
-        .stat-box .number {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .stat-box .label {
-            font-size: 0.95em;
-            opacity: 0.95;
-        }
-
-        .action-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-top: 15px;
-            font-weight: 600;
-            transition: all 0.3s ease;
             border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.1em;
             cursor: pointer;
-            font-size: 1em;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
         }
-
-        .action-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        .answer-btn:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255,107,107,0.6); }
+        .answer-btn.ja { background: linear-gradient(45deg, #55a3ff, #007acc); }
+        .answer-btn.nein { background: linear-gradient(45deg, #26de81, #20bf6b); }
+        .progress {
+            background: #f1f2f6;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
-
-        .footer {
-            background: #f0f0f0;
-            padding: 20px 30px;
+        .progress-bar {
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .result {
+            display: none;
             text-align: center;
-            color: #666;
-            font-size: 0.95em;
-            border-top: 2px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
         }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .tab-btn {
-                padding: 15px;
-                font-size: 0.95em;
-                min-width: 100px;
-            }
-
-            .tab-content {
-                padding: 25px 15px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+        .result.show { display: block; animation: bounceIn 0.6s; }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
+        .hoch { background: linear-gradient(45deg, #ff9ff3, #f368e0); color: white; }
+        .mittel { background: linear-gradient(45deg, #feca57, #ddbea9); color: #333; }
+        .niedrig { background: linear-gradient(45deg, #00b894, #00a085); color: white; }
+        .restart-btn {
+            background: #00b894;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        .restart-btn:hover { background: #00a085; transform: translateY(-2px); }
+        .risiko-score {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-btn.active { background: white; color: #667eea; font-weight: bold; }
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .tab-content.active { display: block; }
+        .fact-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 5px solid #ff6b6b;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5em; }
+            .quiz-container { padding: 20px 15px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🚬 Vapen - Die Fakten</h1>
-            <p>Alles, was du wissen solltest</p>
+    <h1>🧠 Vapen-Checker</h1>
+    <div class="quiz-container">
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
         </div>
-
-        <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('sucht')">🧠 Sucht</button>
-            <button class="tab-btn" onclick="showTab('gesundheit')">❤️ Gesundheit</button>
-            <button class="tab-btn" onclick="showTab('umwelt')">🌍 Umwelt</button>
-            <button class="tab-btn" onclick="showTab('hilfe')">💬 Hilfe</button>
-        </div>
-
-        <!-- SUCHT TAB -->
-        <div id="sucht" class="tab-content active">
-            <h2 class="section-title">🧠 Nikotin & Sucht</h2>
-
-            <div class="fact-box">
-                ⚠️ Jede 2. bis 3. Person, die mit Vapen anfängt, wird abhängig. Nikotin wirkt extrem schnell!
-            </div>
-
-            <div class="info-card">
-                <h3>Warum sind Vapes so süchtig?</h3>
-                <p>Vapes enthalten konzentriertes Nikotin. Es braucht oft nur wenige Züge, bis dein Gehirn daran gewöhnt ist. Besonders kritisch: Jugendliche werden schneller abhängig als Erwachsene!</p>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="number">2/3</div>
-                    <div class="label">werden schnell süchtig</div>
-                </div>
-                <div class="stat-box">
-                    <div class="number">9,2%</div>
-                    <div class="label">der 15-19 Jährigen vapen</div>
-                </div>
-            </div>
-
-            <div class="warning-box">
-                <h3>🚨 Wichtig für dein Gehirn!</h3>
-                <p>Dein Gehirn entwickelt sich bis etwa 25 Jahre. Nikotin beeinflusst diese Entwicklung negativ und kann zu:</p>
-                <div class="list-item">Schlechteren Schulnoten und weniger Konzentration führen</div>
-                <div class="list-item">Gedächtnis- und Aufmerksamkeitsproblemen führen</div>
-                <div class="list-item">Stimmungsproblemen und psychischen Auffälligkeiten führen</div>
-            </div>
-
-            <div class="info-card">
-                <h3>Von Vapen zu echten Zigaretten?</h3>
-                <p>Studien zeigen: Von den Jugendlichen, die mit Vapen anfangen, steigen 20-22% später auf echte Tabak-Zigaretten um. Ein Vape ist also oft nicht das Ende, sondern der Anfang!</p>
-            </div>
-
-            <div class="info-card">
-                <h3>💡 Fun Fact?</h3>
-                <p>Eine Einweg-Vape kann soviel Nikotin enthalten wie 200 Zigaretten! Und die süßen Aromen (Erdbeere, Vanille, etc.) verstecken die Suchtgefahr - das ist Marketing-Trick!</p>
+        
+        <!-- Fragen -->
+        <div class="question active" id="q1">
+            <div>1/6 Hast du schon mal gevaped? 🚬</div>
+            <div class="answers">
+                <button class="answer-btn ja" onclick="answer(1, true)">Ja 😏</button>
+                <button class="answer-btn nein" onclick="answer(1, false)">Nein 🙌</button>
             </div>
         </div>
-
-        <!-- GESUNDHEIT TAB -->
-        <div id="gesundheit" class="tab-content">
-            <h2 class="section-title">❤️ Deine Gesundheit</h2>
-
-            <div class="fact-box">
-                Vapen ist keine harmlose Alternative! Der Dampf enthält gefährliche Chemikalien, auch ohne Nikotin.
-            </div>
-
-            <div class="warning-box">
-                <h3>🫁 Was passiert in der Lunge?</h3>
-                <p>Jugendliche, die vapen, klagen doppelt so häufig über:</p>
-                <div class="list-item">Husten und chronische Bronchitis</div>
-                <div class="list-item">Atemnot und Kurzatmigkeit</div>
-                <div class="list-item">Asthma und verstopfte Nase</div>
-                <div class="list-item">Brustschmerzen und Müdigkeit</div>
-            </div>
-
-            <div class="info-card">
-                <h3>Die versteckten Gefahren</h3>
-                <p>Im Dampf sind nicht nur Nikotin, sondern auch:</p>
-                <div class="list-item"><strong>Feinpartikel</strong> - schädigen die Lunge</div>
-                <div class="list-item"><strong>Formaldehyd</strong> - krebserregender Stoff</div>
-                <div class="list-item"><strong>Schwermetalle</strong> - lagern sich in Organen ein</div>
-                <div class="list-item"><strong>Aromen</strong> - können Atemwegserkrankungen auslösen</div>
-            </div>
-
-            <div class="info-card">
-                <h3>Langzeitfolgen?</h3>
-                <p>Wissenschaftler warnen vor möglichen Folgen, die wir erst später sehen werden: Chronische Lungenerkrankungen, erhöhtes Krebsrisiko, Herzprobleme. Das Risiko ist real!</p>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="number">2x</div>
-                    <div class="label">häufiger Atemwegsprobleme</div>
-                </div>
-                <div class="stat-box">
-                    <div class="number">↑ 20%</div>
-                    <div class="label">Risiko für Asthma</div>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <h3>🏥 Hilfreiche Links</h3>
-                <p><strong>feel-ok.ch</strong> - Infos & Selbsttest zum Vapen</p>
-                <p><strong>Lungenliga.ch</strong> - Alles rund um Lungengesundheit</p>
+        
+        <div class="question" id="q2">
+            <div>2/6 Riechst du manchmal nach süßem Dampf? 👃</div>
+            <div class="answers">
+                <button class="answer-btn ja" onclick="answer(2, true)">Ja</button>
+                <button class="answer-btn nein" onclick="answer(2, false)">Nein</button>
             </div>
         </div>
-
-        <!-- UMWELT TAB -->
-        <div id="umwelt" class="tab-content">
-            <h2 class="section-title">🌍 Vapen & Umwelt</h2>
-
-            <div class="fact-box">
-                2022: 10 Millionen Vapes wurden in die Schweiz importiert. Die meisten landen in der Mülltonne statt beim Recycling!
-            </div>
-
-            <div class="warning-box">
-                <h3>⚡ Das Lithium-Problem</h3>
-                <p>Jede Vape enthält eine Lithium-Batterie. Werden die weggeworfen, gelangt Lithium in die Umwelt:</p>
-                <div class="list-item">In Großbritannien werden pro Woche 1,3 Millionen Vapes weggeworfen</div>
-                <div class="list-item">Das ist genug Lithium, um 1.200 Elektro-Autos zu bauen!</div>
-                <div class="list-item">Das Lithium landet statt in Batterien auf Londons Straßen und in der Natur</div>
-            </div>
-
-            <div class="info-card">
-                <h3>🔥 Brandgefahr in Müllverbrennungsanlagen</h3>
-                <p>Weggeworfene Vapes führen zu Bränden bei der Müllbehandlung. Das kostet Geld, verschmutzt die Luft und ist gefährlich für Arbeiter!</p>
-            </div>
-
-            <div class="info-card">
-                <h3>Kunststoff = Mikroplastik</h3>
-                <p>Die Kunststoffhülle der Vape zerfällt zu Mikroplastik. Das verschmutzt Böden und Gewässer und schadet Tieren und Pflanzen.</p>
-            </div>
-
-            <div class="warning-box">
-                <h3>☠️ Giftige Chemikalien in der Natur</h3>
-                <p>Wenn Vapes falsch entsorgt werden, gelangen folgende Stoffe in die Umwelt:</p>
-                <div class="list-item">Nikotin - giftig für Insekten und Vögel</div>
-                <div class="list-item">Schwermetalle (Nickel, Kobalt, Mangan)</div>
-                <div class="list-item">Süßstoffe und Aromen - belasten Gewässer</div>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="number">10Mio</div>
-                    <div class="label">Vapes pro Jahr (CH)</div>
-                </div>
-                <div class="stat-box">
-                    <div class="number">10kg</div>
-                    <div class="label">Lithium pro Woche (UK)</div>
-                </div>
-            </div>
-
-            <div class="info-card">
-                <h3>✅ Was du tun kannst</h3>
-                <div class="list-item">Vapes NIE in die Mülltonne werfen!</div>
-                <div class="list-item">Bei Verkaufsstellen zurückgeben (Kiosk, Tankstelle, Apotheke)</div>
-                <div class="list-item">Zu einer Elektroschrott-Sammelstelle bringen</div>
-                <div class="list-item">Am besten: Gar nicht erst vapen!</div>
+        
+        <div class="question" id="q3">
+            <div>3/6 Denkst du oft ans Vapen (z.B. in der Schule)? 🧠</div>
+            <div class="answers">
+                <button class="answer-btn ja" onclick="answer(3, true)">Ja</button>
+                <button class="answer-btn nein" onclick="answer(3, false)">Nein</button>
             </div>
         </div>
-
-        <!-- HILFE TAB -->
-        <div id="hilfe" class="tab-content">
-            <h2 class="section-title">💬 Hilfe & Beratung</h2>
-
-            <div class="info-card">
-                <h3>Du vапст bereits und möchtest aufhören?</h3>
-                <p>Das ist cool, dass du das in Betracht ziehst! Es ist möglich und du bist nicht allein.</p>
-                <button class="action-button">Tipps zum Aufhören</button>
-            </div>
-
-            <div class="info-card">
-                <h3>📞 Beratungsstellen (Schweiz)</h3>
-                <p><strong>Suchttelefon:</strong> 0800 040 080 (kostenlos, anonym)</p>
-                <p><strong>Jugend & Sucht:</strong> feel-ok.ch → Beratung</p>
-                <p><strong>KISS (Suchtberatung):</strong> In deiner Region</p>
-            </div>
-
-            <div class="info-card">
-                <h3>💪 Über Nikotin sprechen</h3>
-                <p>Es ist OK, über Sucht zu sprechen. Mit:</p>
-                <div class="list-item">Freunden oder Familie vertrauensvoll reden</div>
-                <div class="list-item">Schule: Schulberater oder Schulsozialarbeiter</div>
-                <div class="list-item">Jugendtreff: Mit den Leitern sprechen</div>
-                <div class="list-item">Anonyme Hotlines: Kein Stress, keine Vorwürfe</div>
-            </div>
-
-            <div class="info-card">
-                <h3>🎯 Gründe, NICHT zu vapen</h3>
-                <div class="list-item">Dein Gehirn braucht Nikotin nicht - es ist eine Droge!</div>
-                <div class="list-item">Süchtig sein bedeutet: die Kontrolle verlieren</div>
-                <div class="list-item">Hohe Kosten - dein Taschengeld!</div>
-                <div class="list-item">Du wirst schneller abhängig als Erwachsene</div>
-                <div class="list-item">Deine Lunge dankt es dir!</div>
-                <div class="list-item">Die Umwelt auch!</div>
-            </div>
-
-            <div class="warning-box">
-                <h3>⚖️ Rechtliches</h3>
-                <p>Seit 1. Oktober 2024: Vapen und Tabak dürfen an unter 18-Jährige NICHT verkauft werden. Es ist verboten! Wer es verkauft, begeht eine Straftat.</p>
+        
+        <div class="question" id="q4">
+            <div>4/6 Fühlst du dich ohne Vape unruhig? 😰</div>
+            <div class="answers">
+                <button class="answer-btn ja" onclick="answer(4, true)">Ja</button>
+                <button class="answer-btn nein" onclick="answer(4, false)">Nein</button>
             </div>
         </div>
-
-        <div class="footer">
-            <p>💡 Fragen? Sprich mit uns im Jugendtreff! Alle Infos sind anonym und vertraulich.</p>
-            <p style="margin-top: 10px; font-size: 0.9em; color: #999;">Quellen: BAG, Suchtprävention Schweiz, WHO, Lungenliga</p>
+        
+        <div class="question" id="q5">
+            <div>5/6 Hustest oder hast du Atemprobleme? 😷</div>
+            <div class="answers">
+                <button class="answer-btn ja" onclick="answer(5, true)">Ja</button>
+                <button class="answer-btn nein" onclick="answer(5, false)">Nein</button>
+            </div>
+        </div>
+        
+        <div class="question" id="q6">
+            <div>6/6 Siehst du Vapes als "cool" an? 🔥</div>
+            <div class="answers">
+                <button class="answer-btn ja" onclick="answer(6, true)">Ja</button>
+                <button class="answer-btn nein" onclick="answer(6, false)">Nein</button>
+            </div>
+        </div>
+        
+        <!-- Ergebnisse -->
+        <div class="result" id="result">
+            <div class="risiko-score" id="score"></div>
+            <div id="resultText"></div>
+            <button class="restart-btn" onclick="restart()">Nochmal testen! 🔄</button>
         </div>
     </div>
 
+    <!-- Info-Tabs (aus vorherigem Tool integriert) -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('sucht')">💥 Sucht</button>
+        <button class="tab-btn" onclick="showTab('gesundheit')">😷 Gesundheit</button>
+        <button class="tab-btn" onclick="showTab('umwelt')">🌍 Umwelt</button>
+        <button class="tab-btn" onclick="showTab('hilfe')">🆘 Hilfe</button>
+    </div>
+
+    <div id="sucht" class="tab-content active">
+        <div class="fact-box">
+            <strong>💥 Nikotin macht RASEND schnell süchtig!</strong><br>
+            Dein Gehirn verändert sich – Konzentration ↓, Schlafprobleme ↑ [web:2][web:21]
+        </div>
+        - 3x höheres Risiko für Zigaretten später<br>
+        - 25% der 15-Jährigen vapen in CH [web:21]
+    </div>
+
+    <div id="gesundheit" class="tab-content">
+        <div class="fact-box">
+            <strong>😷 Lunge + Herz im Alarmzustand!</strong><br>
+            Toxische Stoffe, Asthma-Verschlimmerung, EVALI möglich [web:5][web:32]
+        </div>
+        - Metalle im Dampf<br>- Gehirnentwicklung gestoppt
+    </div>
+
+    <div id="umwelt" class="tab-content">
+        <div class="fact-box">
+            <strong>🌍 Giftmüll-Alarm!</strong><br>
+            Lithium-Batterien verseuchen Gewässer [web:24][web:27]
+        </div>
+        - Einweg-Vapes verboten (CH 2025)<br>- Recyceln bei SENS!
+    </div>
+
+    <div id="hilfe" class="tab-content">
+        <div class="fact-box">
+            <strong>🆘 Aufhören-Tipps:</strong>
+        </div>
+        - Kaugummi kauen 🍬<br>
+        - Sport machen 🏃‍♂️<br>
+        - Apps: QuitNow! (CH-Support)<br>
+        - Hotline: Pro Jugend 0848 333 110<br>
+        Mehr: <a href="https://www.vapefree.info" target="_blank">vapefree.info</a> [web:25]
+    </div>
+
     <script>
+        let currentQuestion = 1;
+        let score = 0;
+        const totalQuestions = 6;
+
+        function answer(questionNum, isJa) {
+            if (isJa) score += (questionNum <= 2 ? 2 : 1); // Höheres Gewicht für direkte Nutzung
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            document.getElementById(`q${currentQuestion}`).classList.remove('active');
+            currentQuestion++;
+            if (currentQuestion > totalQuestions) {
+                showResult();
+            } else {
+                document.getElementById(`q${currentQuestion}`).classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion - 1) / totalQuestions * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showResult() {
+            document.querySelectorAll('.question').forEach(q => q.style.display = 'none');
+            const result = document.getElementById('result');
+            const scoreEl = document.getElementById('score');
+            const textEl = document.getElementById('resultText');
+            
+            let risiko, text;
+            if (score >= 7) {
+                risiko = '🔴 HOCH';
+                text = 'Du bist in der Suchtfalle! Nikotin hat dein Gehirn im Griff. Zeit für Hilfe – du schaffst das! 💪';
+                result.className = 'result show hoch';
+            } else if (score >= 4) {
+                risiko = '🟡 MITTEL';
+                text = 'Achtung! Du balancierst am Rand. Gesundheit & Umwelt leiden schon. Jetzt umsteuern! ⚠️';
+                result.className = 'result show mittel';
+            } else {
+                risiko = '🟢 NIEDRIG';
+                text = 'Super! Bleib so! Vapes sind Müll für Lunge & Planeten. Bleib clean! 🌟';
+                result.className = 'result show niedrig';
+            }
+            
+            scoreEl.textContent = risiko;
+            textEl.innerHTML = text;
+            result.style.display = 'block';
+        }
+
+        function restart() {
+            currentQuestion = 1;
+            score = 0;
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('q1').classList.add('active');
+            document.getElementById('progressBar').style.width = '0%';
+        }
+
         function showTab(tabName) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-
-            // Remove active class from all buttons
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-
-            // Add active class to clicked button
+            // Tabs deaktivieren
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Aktiven Tab aktivieren
             event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
         }
     </script>
 </body>
